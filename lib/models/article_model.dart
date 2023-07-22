@@ -1,4 +1,8 @@
 import 'package:equatable/equatable.dart';
+import 'package:http/http.dart' as http;
+import 'package:xml2json/xml2json.dart';
+import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class Article extends Equatable {
   final String id;
@@ -12,7 +16,7 @@ class Article extends Equatable {
   final int views;
   final DateTime createdAt;
 
-  Article({
+  const Article({
     required this.id,
     required this.title,
     required this.subtitle,
@@ -25,92 +29,14 @@ class Article extends Equatable {
     required this.createdAt,
   });
 
-  static List<Article> articles = [
-    Article(
-      id: '1',
-      title:
-          "Lorem ipsum dolor sit amet, consectetur elit. Cras molestie maximus",
-      subtitle:
-          'Aliquam laoreet ante non diam suscipit accumsan. Sed vel consequat leo, non suscipit odio. Aliquam turpis',
-      body:
-          'Nullam sed augue a turpis bibendum cursus. Suspendisse potenti. Praesent mi ligula, mollis quis elit ac, eleifend vestibulum ex. Nullam quis sodales tellus. Integer feugiat dolor et nisi semper luctus. Nulla egestas nec augue facilisis pharetra. Sed ultricies nibh a odio aliquam, eu imperdiet purus aliquam. Donec id ante nec',
-      author: 'Anna G. Wright',
-      authorImageUrl:
-          'https://images.unsplash.com/photo-1658786403875-ef4086b78196?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80',
-      category: 'Politics',
-      views: 1204,
-      imageUrl:
-          'https://images.unsplash.com/photo-1656106534627-0fef76c8b042?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
-      createdAt: DateTime.now().subtract(const Duration(hours: 5)),
-    ),
-    Article(
-      id: '2',
-      title:
-          'Sed sed molestie libero, et massa. Donec auctor vestibulum pellentesque',
-      subtitle:
-          'Aliquam laoreet ante non diam suscipit accumsan. Sed vel consequat leo, non suscipit odio. Aliquam turpis',
-      body:
-          'Nullam sed augue a turpis bibendum cursus. Suspendisse potenti. Praesent mi ligula, mollis quis elit ac, eleifend vestibulum ex. Nullam quis sodales tellus. Integer feugiat dolor et nisi semper luctus. Nulla egestas nec augue facilisis pharetra. Sed ultricies nibh a odio aliquam, eu imperdiet purus aliquam. Donec id ante nec',
-      author: 'Anna G. Wright',
-      authorImageUrl:
-          'https://images.unsplash.com/photo-1658786403875-ef4086b78196?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80',
-      category: 'Politics',
-      views: 1204,
-      imageUrl:
-          'https://images.unsplash.com/photo-1574280363402-2f672940b871?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
-      createdAt: DateTime.now().subtract(const Duration(hours: 6)),
-    ),
-    Article(
-      id: '3',
-      title:
-          'Aliquam ullamcorper ipsum, vel consequat sem finibus a. Donec lobortis',
-      subtitle:
-          'Aliquam laoreet ante non diam suscipit accumsan. Sed vel consequat leo, non suscipit odio. Aliquam turpis',
-      body:
-          'Nullam sed augue a turpis bibendum cursus. Suspendisse potenti. Praesent mi ligula, mollis quis elit ac, eleifend vestibulum ex. Nullam quis sodales tellus. Integer feugiat dolor et nisi semper luctus. Nulla egestas nec augue facilisis pharetra. Sed ultricies nibh a odio aliquam, eu imperdiet purus aliquam. Donec id ante nec',
-      author: 'Anna G. Wright',
-      authorImageUrl:
-          'https://images.unsplash.com/photo-1658786403875-ef4086b78196?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80',
-      category: 'Politics',
-      views: 1204,
-      imageUrl:
-          'https://images.unsplash.com/photo-1616832880334-b1004d9808da?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1336&q=80',
-      createdAt: DateTime.now().subtract(const Duration(hours: 8)),
-    ),
-    Article(
-      id: '4',
-      title: 'Proin mattis nec lorem at rutrum. Curabitur sit augue vel',
-      subtitle:
-          'Aliquam laoreet ante non diam suscipit accumsan. Sed vel consequat leo, non suscipit odio. Aliquam turpis',
-      body:
-          'Nullam sed augue a turpis bibendum cursus. Suspendisse potenti. Praesent mi ligula, mollis quis elit ac, eleifend vestibulum ex. Nullam quis sodales tellus. Integer feugiat dolor et nisi semper luctus. Nulla egestas nec augue facilisis pharetra. Sed ultricies nibh a odio aliquam, eu imperdiet purus aliquam. Donec id ante nec',
-      author: 'Anna G. Wright',
-      authorImageUrl:
-          'https://images.unsplash.com/photo-1658786403875-ef4086b78196?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80',
-      category: 'Politics',
-      views: 1204,
-      imageUrl:
-          'https://images.unsplash.com/photo-1653587416464-8a99cc74d192?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=974&q=80',
-      createdAt: DateTime.now().subtract(const Duration(hours: 19)),
-    ),
-    Article(
-      id: '5',
-      title:
-          'Donec lobortis lectus a iaculis rutrum. Vestibulum libero sit amet',
-      subtitle:
-          'Aliquam laoreet ante non diam suscipit accumsan. Sed vel consequat leo, non suscipit odio. Aliquam turpis',
-      body:
-          'Nullam sed augue a turpis bibendum cursus. Suspendisse potenti. Praesent mi ligula, mollis quis elit ac, eleifend vestibulum ex. Nullam quis sodales tellus. Integer feugiat dolor et nisi semper luctus. Nulla egestas nec augue facilisis pharetra. Sed ultricies nibh a odio aliquam, eu imperdiet purus aliquam. Donec id ante nec',
-      author: 'Anna G. Wright',
-      authorImageUrl:
-          'https://images.unsplash.com/photo-1658786403875-ef4086b78196?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1287&q=80',
-      category: 'Politics',
-      views: 1204,
-      imageUrl:
-          'https://images.unsplash.com/photo-1658330056737-0fd4bda0e4c1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1351&q=80',
-      createdAt: DateTime.now().subtract(const Duration(hours: 20)),
-    ),
-  ];
+  static List<Article> articles = [];
+
+  @override
+  String toString() {
+    return 'Article{ id: $id ,title: $title,subtitle: $subtitle, body: $body, '
+        'category: $category, createdAt: $createdAt, '
+        'imageUrl: $imageUrl}';
+  }
 
   @override
   List<Object?> get props => [
@@ -125,4 +51,53 @@ class Article extends Equatable {
         views,
         createdAt,
       ];
+
+  Future<void> fetchNews() async {
+    String rssUrl =
+        'https://timesofindia.indiatimes.com/rssfeedstopstories.cms';
+    var response = await http.get(Uri.parse(rssUrl));
+
+    if (response.statusCode == 200) {
+      var rawXml = response.body;
+      var xml2Json = Xml2Json();
+
+      // Parse the XML data to JSON
+      xml2Json.parse(rawXml);
+      var jsonString = xml2Json.toOpenRally();
+
+      List<dynamic> jsonData =
+          json.decode(jsonString)['rss']['channel']['item'];
+
+      List<Article> newsItems = [];
+      int idCounter = 1;
+
+      for (var item in jsonData) {
+        String title = item['title'];
+        String description = item['description'];
+        String link = item['link'];
+        String pubDateString = item['pubDate'];
+        DateTime pubDate =
+            DateFormat('EEE, dd MMM yyyy HH:mm:ss Z').parse(pubDateString);
+        String enclosure = item['enclosure']['url'];
+
+        Article newsItem = Article(
+            id: idCounter.toString(),
+            title: title,
+            body: description,
+            author: "AKash",
+            authorImageUrl: enclosure,
+            subtitle: link,
+            createdAt: pubDate,
+            imageUrl: enclosure,
+            views: 40,
+            category: "Politics");
+        idCounter++;
+        newsItems.add(newsItem);
+      }
+      articles = newsItems;
+      print(articles[0]);
+    } else {
+      print("Error in fetching the news");
+    }
+  }
 }
