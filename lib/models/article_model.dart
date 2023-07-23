@@ -52,7 +52,7 @@ class Article extends Equatable {
         createdAt,
       ];
 
-  Future<void> fetchNews() async {
+  Future<List<Article>> fetchNews() async {
     String rssUrl =
         'https://timesofindia.indiatimes.com/rssfeedstopstories.cms';
     var response = await http.get(Uri.parse(rssUrl));
@@ -94,10 +94,10 @@ class Article extends Equatable {
         idCounter++;
         newsItems.add(newsItem);
       }
-      articles = newsItems;
-      print(articles[0]);
+      return newsItems;
     } else {
       print("Error in fetching the news");
+      return [];
     }
   }
 }

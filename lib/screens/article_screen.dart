@@ -46,6 +46,8 @@ class _NewsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int articleIndex = Article.articles.indexOf(article);
+    final List<Article> articles = Article.articles;
     return Container(
         padding: const EdgeInsets.all(20),
         decoration: const BoxDecoration(
@@ -122,10 +124,19 @@ class _NewsBody extends StatelessWidget {
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, childAspectRatio: 1.25),
               itemBuilder: (context, index) {
-                return ImageContainer(
-                  width: MediaQuery.of(context).size.width * 0.42,
-                  imageUrl: article.imageUrl,
-                  margin: const EdgeInsets.only(right: 5.0, bottom: 5.0),
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, ArticleScreen.routeName,
+                        arguments: articles[((articleIndex + index + 1) %
+                            Article.articles.length)]);
+                  },
+                  child: ImageContainer(
+                    width: MediaQuery.of(context).size.width * 0.42,
+                    imageUrl: articles[((articleIndex + index + 1) %
+                            Article.articles.length)]
+                        .imageUrl,
+                    margin: const EdgeInsets.only(right: 5.0, bottom: 5.0),
+                  ),
                 );
               },
             )

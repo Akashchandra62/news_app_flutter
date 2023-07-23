@@ -40,20 +40,20 @@ class BottomNavBar extends StatelessWidget {
           ),
           label: 'Search',
         ),
-        BottomNavigationBarItem(
-          icon: Container(
-            margin: const EdgeInsets.only(right: 50),
-            child: IconButton(
-              onPressed: () {
-                print("No Profile Screen yet");
-              },
-              icon: const Icon(
-                (Icons.person),
-              ),
-            ),
-          ),
-          label: 'Profile',
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Container(
+        //     margin: const EdgeInsets.only(right: 50),
+        //     child: IconButton(
+        //       onPressed: () {
+        //         print("No Profile Screen yet");
+        //       },
+        //       icon: const Icon(
+        //         (Icons.person),
+        //       ),
+        //     ),
+        //   ),
+        //   label: 'Profile',
+        // ),
       ],
     );
   }

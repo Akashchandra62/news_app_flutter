@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/models/article_model.dart';
 import 'package:news_app/screens/article_screen.dart';
+import 'package:news_app/screens/discover_screen.dart';
 import 'package:news_app/widgets/bottom_nav_bar.dart';
 import 'package:news_app/widgets/custom_tag.dart';
 
@@ -13,7 +14,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Article article = Article.articles[0];
+    // Article article = Article.articles[0];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -28,13 +29,15 @@ class HomeScreen extends StatelessWidget {
       ),
       bottomNavigationBar: const BottomNavBar(index: 0),
       extendBodyBehindAppBar: true,
-      body: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          _NewsOfTheDay(article: article),
-          _BreakingNews(articles: Article.articles),
-        ],
-      ),
+      body: Article.articles.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                _NewsOfTheDay(article: Article.articles[0]),
+                _BreakingNews(articles: Article.articles),
+              ],
+            ),
     );
   }
 }
@@ -60,9 +63,17 @@ class _BreakingNews extends StatelessWidget {
                     .headlineSmall!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
-              Text(
-                'More',
-                style: Theme.of(context).textTheme.bodyLarge,
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    DiscoverScreen.routeName,
+                  );
+                },
+                child: Text(
+                  'More',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ),
             ],
           ),
@@ -127,10 +138,10 @@ class _BreakingNews extends StatelessWidget {
 class _NewsOfTheDay extends StatelessWidget {
   const _NewsOfTheDay({
     Key? key,
-    required this.article,
+    this.article,
   }) : super(key: key);
 
-  final Article article;
+  final Article? article;
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +149,7 @@ class _NewsOfTheDay extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.45,
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-      imageUrl: article.imageUrl,
+      imageUrl: article!.imageUrl,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.end,
@@ -157,7 +168,7 @@ class _NewsOfTheDay extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            article.title,
+            article!.title,
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   fontWeight: FontWeight.bold,
                   height: 1.25,

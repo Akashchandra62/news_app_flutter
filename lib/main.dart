@@ -69,13 +69,13 @@ class _MyAppState extends State<MyApp> {
     fetchNews();
   }
 
-  void fetchNews() async {
-    await newsRepository
+  Future<void> fetchNews() async {
+    newsList = await newsRepository
         .fetchNews(); // Use the fetchNews method from NewsRepository
 
     setState(() {
       // Update the newsList with the fetched news items
-      newsList = Article.articles;
+      Article.articles = newsList;
     });
   }
 
@@ -90,7 +90,7 @@ class _MyAppState extends State<MyApp> {
       ),
       initialRoute: '/',
       routes: {
-        HomeScreen.routeName: (context) => const HomeScreen(),
+        HomeScreen.routeName: (context) => HomeScreen(),
         DiscoverScreen.routeName: (context) => const DiscoverScreen(),
         ArticleScreen.routeName: (context) => const ArticleScreen(),
       },
